@@ -14,6 +14,11 @@ const map = L.map("map");
 map.fitBounds(shikokuBounds, {
   padding: [1, 1], // スマホ用の最小余白
 });
+// 初期表示後にサイズ再計算（超重要）
+setTimeout(() => {
+  map.invalidateSize();
+}, 200);
+
 
 // OSMタイル
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
