@@ -8,7 +8,7 @@ const shikokuBounds = L.latLngBounds(
   [34.6, 134.0]
 );
 
-const map = L.map("map");
+const map = L.map("map", {zoomControl: false});
 map.fitBounds(shikokuBounds, { padding: [1, 1] });
 
 setTimeout(() => {
