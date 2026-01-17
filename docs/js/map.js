@@ -149,7 +149,6 @@ if (locateBtn) {
 // 検索ボックス処理
 // =======================
 const searchInput = document.getElementById("search-input");
-//const searchBtn = document.getElementById("search-btn");
 const suggestions = document.getElementById("search-suggestions");
 
 function clearSuggestions() {
@@ -203,9 +202,6 @@ function executeSearch() {
     firstHit.openPopup();
   }
 }
-
-searchBtn.addEventListener("click", executeSearch);
-
 searchInput.addEventListener("keydown", e => {
   if (e.key === "Enter") executeSearch();
 });
