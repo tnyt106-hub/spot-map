@@ -64,7 +64,7 @@ h2 {
 #locate-btn .label {
   font-size: 9px;   
   line-height: 1;
-  margin-top: -1px;
+  transform: translateY(2px);
 }
 #locate-btn:hover {
   background: #f0f0f0;
