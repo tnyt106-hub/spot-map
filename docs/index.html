@@ -44,6 +44,16 @@
     </h2>
 
     <div id="map">
+    　//検索ボックス
+  　　　<div class="search-box">
+  　　　<input
+    　　type="text"
+    　　id="search-input"
+    　　placeholder="スポット名で検索"
+    　　aria-label="スポット検索"
+  　　　/>
+　　　　</div>
+      //現在地ボタン
     　<button id="locate-btn" 
        type="button" 
        aria-label="現在地を地図の中心に表示">
@@ -51,17 +61,14 @@
  　　　 <span class="label">現在地</span>
      </button>
     </div>
-
   </section>
 </main>
 
 
   <!-- Leaflet JS（必ず map.js より前） -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
   <!-- MarkerCluster JS -->
   <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
-
   <!-- 自前JS -->
   <script src="js/map.js"></script>
 
