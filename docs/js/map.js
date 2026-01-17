@@ -14,7 +14,7 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 // =======================
 // スポットピン表示
 // =======================
-fetch("json/spots.json")
+fetch("./json/spots.json")
   .then((res) => {
     if (!res.ok) throw new Error("spots.json not found");
     return res.json();
