@@ -4,40 +4,21 @@
   <meta charset="UTF-8" />
  <title>四国おすすめスポットマップ｜温泉・自然・グルメを地図で探す</title>
   
-<meta
-  name="description"
-  content="四国（徳島・香川・愛媛・高知）の観光スポット・温泉・自然・グルメを地図で探せる観光マップです。"
-  />
-
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-
-
-
+ <meta name="description" content="四国（徳島・香川・愛媛・高知）の観光スポット・温泉・自然・グルメを地図で探せる観光マップです。"/>
+ <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <!-- Leaflet CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
-
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <!-- MarkerCluster CSS -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css"
-  />
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css"
-  />
-
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css"/>
   <!-- 自前CSS -->
   <link rel="stylesheet" href="css/style.css" />
 </head>
-<body>
 
+<body>
 <h1>四国おすすめスポットマップ</h1>
 <p>四国（徳島・香川・愛媛・高知）のおすすめスポットを探せるマップガイドです。</p>
 <p class="site-notice">※本サイトは現在「試験公開中」です。掲載スポット・機能は順次拡充予定です。</p>
-
 
 <main>
   <section aria-labelledby="map-title">
@@ -46,18 +27,15 @@
     <div class="map-wrapper">
       <!-- 検索ボックス -->
       <div class="search-box">
-  <div class="search-input-wrapper">
+    <div class="search-input-wrapper">
     <input
       type="text"
       id="search-input"
       placeholder="スポット名で検索"
       aria-label="スポット検索"
     />
-    <button id="search-btn" type="button">検索</button>
-  </div>
   <ul id="search-suggestions"></ul>
 </div>
-
       <!-- 現在地ボタン -->
       <button id="locate-btn"
         type="button" 
