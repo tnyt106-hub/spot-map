@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
  <title>四国おすすめスポットマップ｜温泉・自然・グルメを地図で探す</title>
   
-　<meta
+<meta
   name="description"
   content="四国（徳島・香川・愛媛・高知）の観光スポット・温泉・自然・グルメを地図で探せる観光マップです。"
-　/>
+  />
 
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
@@ -39,28 +39,28 @@
 
 <main>
   <section aria-labelledby="map-title">
-    <h2 id="map-title" style="display:none;">
-      四国おすすめスポット地図
-    </h2>
-
-    <div id="map">
-    　//検索ボックス
-  　　　<div class="search-box">
-  　　　<input
-    　　type="text"
-    　　id="search-input"
-    　　placeholder="スポット名で検索"
-    　　aria-label="スポット検索"
-  　　　/>
-　　　　</div>
-      //現在地ボタン
-    　<button id="locate-btn" 
-       type="button" 
+    <h2 id="map-title" style="display:none;">四国おすすめスポット地図</h2>
+    
+    <div class="map-wrapper">
+      <!-- 検索ボックス -->
+      <div class="search-box">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="スポット名で検索"
+          aria-label="スポット検索"
+          />
+          </div>
+    
+      <!-- 現在地ボタン -->
+      <button id="locate-btn"
+        type="button" 
        aria-label="現在地を地図の中心に表示">
        <span class="icon">📍</span>
- 　　　 <span class="label">現在地</span>
+       <span class="label">現在地</span>
      </button>
-    </div>
+    <div id="map"></div>
+      </div>
   </section>
 </main>
 
