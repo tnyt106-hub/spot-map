@@ -37,7 +37,6 @@ const markers = L.markerClusterGroup();
 // =======================
 let allSpots = [];
 let markerEntries = [];
-
 // =======================
 // スポット読み込み
 // =======================
@@ -134,28 +133,66 @@ if (locateBtn) {
 // 検索ボックス処理
 // =======================
 const searchInput = document.getElementById("search-input");
-if (searchInput) {
-  searchInput.addEventListener("input", () => {
-    const keyword = searchInput.value.trim();
+const searchBtn = document.getElementById("search-btn");
+const suggestions = document.getElementById("search-suggestions");
 
-    markers.clearLayers();
+function clearSuggestions() {
+  suggestions.innerHTML = "";
+}
 
-    if (!keyword) {
-      markerEntries.forEach(e => markers.addLayer(e.marker));
-      return;
-    }
+function focusMarker(marker) {
+  markers.clearLayers();
+  markers.addLayer(marker);
+  map.flyTo(marker.getLatLng(), 15);
+  marker.openPopup();
+}
 
-    let firstHit = null;
+function showSuggestions(keyword) {
+  clearSuggestions();
+  if (!keyword) return;
 
-    markerEntries.forEach(e => {
-      if (e.name.includes(keyword)) {
-        markers.addLayer(e.marker);
-        if (!firstHit) firstHit = e.marker;
-      }
+  const hits = markerEntries
+    .filter(e => e.name.includes(keyword))
+    .slice(0, 5);
+
+  hits.forEach(e => {
+    const li = document.createElement("li");
+    li.textContent = e.name;
+    li.addEventListener("click", () => {
+      focusMarker(e.marker);
+      clearSuggestions();
     });
-
-    if (firstHit) {
-      map.setView(firstHit.getLatLng(), 15);
-    }
+    suggestions.appendChild(li);
   });
 }
+searchInput.addEventListener("input", () => {
+  showSuggestions(searchInput.value.trim());
+});
+function executeSearch() {
+  const keyword = searchInput.value.trim();
+  clearSuggestions();
+
+  markers.clearLayers();
+  let firstHit = null;
+
+  markerEntries.forEach(e => {
+    if (e.name.includes(keyword)) {
+      markers.addLayer(e.marker);
+      if (!firstHit) firstHit = e.marker;
+    }
+  });
+
+  if (firstHit) {
+    map.flyTo(firstHit.getLatLng(), 15);
+    firstHit.openPopup();
+  }
+}
+
+searchBtn.addEventListener("click", executeSearch);
+
+searchInput.addEventListener("keydown", e => {
+  if (e.key === "Enter") executeSearch();
+});
+
+
+
