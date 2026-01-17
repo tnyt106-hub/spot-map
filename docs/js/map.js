@@ -133,7 +133,7 @@ if (locateBtn) {
 // 検索ボックス処理
 // =======================
 const searchInput = document.getElementById("search-input");
-const searchBtn = document.getElementById("search-btn");
+//const searchBtn = document.getElementById("search-btn");
 const suggestions = document.getElementById("search-suggestions");
 
 function clearSuggestions() {
