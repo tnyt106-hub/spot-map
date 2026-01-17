@@ -31,6 +31,7 @@ const markers = L.markerClusterGroup();
 // 検索ボックス用
 // =======================
 let allSpots = [];
+let markerEntries = [];
 
 // =======================
 // スポット読み込み
@@ -59,6 +60,8 @@ fetch("./data/spots.json")
 
       const marker = L.marker([s.lat, s.lng]).bindPopup(popupHtml);
       markers.addLayer(marker);
+
+      markerEntries.push({marker,name: s.name ?? ""});//検索ボックス用
     });
 
     map.addLayer(markers);
@@ -94,7 +97,6 @@ if (locateBtn) {
         if (currentMarker) {
           map.removeLayer(currentMarker);
         }
-
         // 現在地マーカー
         currentMarker = L.marker([lat, lng], {
           title: "現在地",
@@ -117,20 +119,28 @@ if (locateBtn) {
 // 検索ボックス処理
 // =======================
 const searchInput = document.getElementById("search-input");
-
 if (searchInput) {
   searchInput.addEventListener("input", () => {
     const keyword = searchInput.value.trim();
-    if (!keyword) return;
 
-    const hit = allSpots.find(s =>
-      s.name && s.name.includes(keyword)
-    );
+    markers.clearLayers();
 
-    if (hit) {
-      map.setView([hit.lat, hit.lng], 15);
-    } else {
-      alert("該当するスポットが見つかりません");
+    if (!keyword) {
+      markerEntries.forEach(e => markers.addLayer(e.marker));
+      return;
+    }
+
+    let firstHit = null;
+
+    markerEntries.forEach(e => {
+      if (e.name.includes(keyword)) {
+        markers.addLayer(e.marker);
+        if (!firstHit) firstHit = e.marker;
+      }
+    });
+
+    if (firstHit) {
+      map.setView(firstHit.getLatLng(), 15);
     }
   });
 }
