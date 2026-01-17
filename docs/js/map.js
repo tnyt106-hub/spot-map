@@ -6,13 +6,13 @@ console.log("map.js loaded");
 // =======================
 // 四国全域の境界（southWest, northEast）
 const shikokuBounds = L.latLngBounds(
-  [32.9, 131.6], // 南西（高知西部寄り）
-  [34.7, 134.2]  // 北東（香川東部寄り）
+  [33.0, 131.8],
+  [34.6, 134.0]
 );
 // 地図初期化（fitBounds を使う）
 const map = L.map("map");
 map.fitBounds(shikokuBounds, {
-  padding: [10, 10], // スマホ用の最小余白
+  padding: [1, 1], // スマホ用の最小余白
 });
 
 // OSMタイル
