@@ -4,20 +4,16 @@ console.log("map.js loaded");
 // =======================
 // 地図初期化
 // =======================
-// 四国全域の境界（southWest, northEast）
-const shikokuBounds = L.latLngBounds(
-  [33.0, 131.8],
-  [34.6, 134.0]
-);
-// 地図初期化（fitBounds を使う）
-const map = L.map("map");
+// 四国のほぼ中心（手動指定）
+const SHIKOKU_CENTER = [33.71, 133.43];
+// 四国全域が収まるズーム
+const SHIKOKU_ZOOM = 8;
+
+const map = L.map("map").setView(SHIKOKU_CENTER, SHIKOKU_ZOOM);
+
 map.fitBounds(shikokuBounds, {
   padding: [1, 1], // スマホ用の最小余白
 });
-// 初期表示後にサイズ再計算（超重要）
-setTimeout(() => {
-  map.invalidateSize();
-}, 200);
 
 
 // OSMタイル
