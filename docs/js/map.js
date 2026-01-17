@@ -21,7 +21,7 @@ const baseMaps = {
   "道路": L.tileLayer("https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png"),
   "航空写真": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}")
 };
-baseMaps["観光向け"].addTo(map);
+baseMaps["標準"].addTo(map);
 L.control.layers(baseMaps).addTo(map);
 const markers = L.markerClusterGroup();
 
