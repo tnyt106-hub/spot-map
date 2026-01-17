@@ -80,35 +80,47 @@ const locateBtn = document.getElementById("locate-btn");
 
 if (locateBtn) {
   locateBtn.addEventListener("click", () => {
-    if (!navigator.geolocation) {
-      alert("このブラウザは位置情報に対応していません");
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-  (pos) => {
-    const lat = pos.coords.latitude;
-    const lng = pos.coords.longitude;
-
-    map.flyTo([lat, lng], 14, { animate: true });
-
-    if (currentMarker) map.removeLayer(currentMarker);
-
-    currentMarker = L.marker([lat, lng])
-      .addTo(map)
-      .bindPopup("📍 現在地")
-      .openPopup();
-  },
-  (err) => {
-    alert("現在地を取得できませんでした");
-  },
-  {
-    enableHighAccuracy: false, // ★最重要
-    timeout: 8000,
-    maximumAge: 300000         // 5分キャッシュ
+  if (!navigator.geolocation) {
+    alert("このブラウザは位置情報に対応していません");
+    return;
   }
-);
-  });
+
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+
+      map.flyTo([lat, lng], 14, { duration: 0.7 });
+
+      if (currentMarker) map.removeLayer(currentMarker);
+
+      currentMarker = L.marker([lat, lng])
+        .addTo(map)
+        .bindPopup("📍 現在地")
+        .openPopup();
+    },
+    (err) => {
+      // ★ 初回許可待ちの可能性が高い
+      if (err.code === err.PERMISSION_DENIED) {
+        alert(
+          "位置情報の使用が許可されていません。\n" +
+          "ブラウザの設定から許可してください。"
+        );
+      } else {
+        alert(
+          "位置情報を取得できませんでした。\n" +
+          "許可後、もう一度ボタンを押してください。"
+        );
+      }
+    },
+    {
+      enableHighAccuracy: false,
+      timeout: 10000,
+      maximumAge: 300000
+    }
+  );
+});
+
 } else {
   console.warn("locate-btn が見つかりません");
 }
