@@ -37,8 +37,6 @@ const markers = L.markerClusterGroup({
     disableClusteringAtZoom: 14,
     // 3. クラスタをクリックした際に、その範囲までズームするアニメーションの有効化
     showCoverageOnHover: false,
-    // 4. マーカーが重なっている場合にクモの巣状に広げる設定
-    spiderfyOnMaxZoom: true
 });
 
 
