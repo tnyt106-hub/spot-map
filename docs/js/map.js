@@ -4,8 +4,10 @@ console.log("map.js loaded");
 // 地図初期化
 // =======================
 const shikokuBounds = L.latLngBounds(
+ // [33.0, 132.8],
+ // [34.6, 134.0]
   [33.0, 132.8],
-  [34.6, 134.0]
+  [34.44, 134.63]
 );
 
 const map = L.map("map", {zoomControl: false});
