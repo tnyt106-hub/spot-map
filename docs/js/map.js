@@ -19,24 +19,7 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: "© OpenStreetMap contributors",
 }).addTo(map);
 
-// =======================
-// クラスタ生成（★1回だけ）
-// =======================
-const markers = L.markerClusterGroup({
-  iconCreateFunction: function (cluster) {
-    const count = cluster.getChildCount();
-
-    let size = "small";
-    if (count >= 100) size = "large";
-    else if (count >= 30) size = "medium";
-
-    return L.divIcon({
-      html: `<div class="cluster ${size}">${count}</div>`,
-      className: "custom-cluster",
-      iconSize: L.point(50, 50),
-    });
-  },
-});
+const markers = L.markerClusterGroup();
 
 // =======================
 // スポット読み込み
