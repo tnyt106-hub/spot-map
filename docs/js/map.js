@@ -61,7 +61,23 @@ fetch("./data/spots.json")
           ${s.url ? `<a href="${s.url}" target="_blank">詳細を見る</a>` : ""}
         </div>
       `;
+    ////////////////////////////////////////////////////  // Googleマップのルート検索用URLを生成
+const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}`; [1]
 
+const popupHtml = `
+    <div class="popup-content">
+        <strong>${s.name ?? "名称不明"}</strong><br>
+        <span style="font-size: 0.8em; color: #666;">${s.category ?? ""}</span><br>
+        ${s.image ? `<img src="${s.image}" style="width:100%; height:auto; margin-top:5px; border-radius:4px;">` : ""} [1]
+        ${s.description ? `<p style="margin: 8px 0; font-size: 0.9em;">${s.description}</p>` : ""} [1]
+        <div style="margin-top:10px; display:flex; gap:5px; flex-wrap:wrap;">
+            ${s.url ? `<a href="${s.url}" target="_blank" class="popup-link-btn">詳細を見る</a>` : ""} [1]
+            <a href="${googleMapsUrl}" target="_blank" class="popup-link-btn route-btn">Googleマップでルート検索</a>
+        </div>
+    </div>
+`;
+/////////////////////////////////////////////////////////////////////////////
+      
       const marker = L.marker([s.lat, s.lng]).bindPopup(popupHtml);
       markers.addLayer(marker);
 
