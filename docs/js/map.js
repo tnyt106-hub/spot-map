@@ -17,6 +17,8 @@ setTimeout(() => {
 
 //地図レイヤ切り替えロジック
 const baseMaps = {
+  "１": L.tileLayer("https://{s}.cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg"),
+  "２": L.tileLayer("https://{s}.cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png"),
   "標準": L.tileLayer("https://{s}.tile.openstreetmap.jp/{z}/{x}/{y}.png"),
   "道路": L.tileLayer("https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png"),
   "航空写真": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}")
