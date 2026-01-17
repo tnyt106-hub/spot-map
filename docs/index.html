@@ -46,13 +46,16 @@
     <div class="map-wrapper">
       <!-- 検索ボックス -->
       <div class="search-box">
-        <input
-          type="text"
-          id="search-input"
-          placeholder="スポット名で検索"
-          aria-label="スポット検索"
-          />
-          </div>
+  <input
+    type="text"
+    id="search-input"
+    placeholder="スポット名で検索"
+    aria-label="スポット検索"
+  />
+  <button id="search-btn" type="button" aria-label="検索">検索</button>
+  <ul id="search-suggestions"></ul>
+</div>
+
     
       <!-- 現在地ボタン -->
       <button id="locate-btn"
@@ -62,6 +65,7 @@
        <span class="label">現在地</span>
      </button>
     <div id="map"></div>
+      
       </div>
   </section>
 </main>
