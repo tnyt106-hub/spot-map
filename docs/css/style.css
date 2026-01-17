@@ -8,6 +8,18 @@ body {
   font-family: sans-serif;
 }
 
+/* ページタイトル */
+h1 {
+  margin: 12px 12px 4px;
+  font-size: 20px;
+}
+/* 説明文（SEO用） */
+h1 + p {
+  margin: 0 12px 8px;
+  font-size: 13px;
+  color: #555;
+}
+
 h2 {
   margin: 8px;
 }
