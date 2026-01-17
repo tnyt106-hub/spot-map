@@ -51,16 +51,6 @@ fetch("./data/spots.json")
 
     spots.forEach(s => {
       if (!s.lat || !s.lng) return;
-
-/*const popupHtml = `
-        <div style="min-width:200px">
-          <b>${s.name ?? "名称不明"}</b><br>
-          <small>${s.category ?? ""}</small><br><br>
-          ${s.image ? `<img src="${s.image}" style="width:100%;border-radius:4px"><br><br>` : ""}
-          ${s.description ? `<div>${s.description}</div><br>` : ""}
-          ${s.url ? `<a href="${s.url}" target="_blank">詳細を見る</a>` : ""}
-        </div>
-      `;*/
     ////////////////////////////////////////////////////  // Googleマップのルート検索用URLを生成
 const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}`; 
 
