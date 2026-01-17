@@ -4,7 +4,14 @@ console.log("map.js loaded");
 // =======================
 // 地図初期化
 // =======================
-const map = L.map("map").setView([34.0, 134.3], 9);
+// 四国全域の境界（southWest, northEast）
+const shikokuBounds = L.latLngBounds(
+  [32.7, 131.4], // 南西（高知沖あたり）
+  [34.8, 134.5]  // 北東（香川沖あたり）
+);
+// 地図初期化（fitBounds を使う）
+const map = L.map("map");
+map.fitBounds(shikokuBounds);
 
 // OSMタイル
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
