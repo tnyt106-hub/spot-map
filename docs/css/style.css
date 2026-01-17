@@ -29,6 +29,22 @@ h2 {
   height: 60vh;
   position: relative;   
 }
+/* 検索ボックスーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー */
+.search-box {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 1000;
+}
+#search-input {
+  width: 180px;
+  padding: 8px 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
 
 /*現在地ボタン-------------------------------------------------  */
 #locate-btn {
