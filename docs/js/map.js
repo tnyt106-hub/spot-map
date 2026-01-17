@@ -6,7 +6,7 @@ console.log("map.js loaded");
 const shikokuBounds = L.latLngBounds(
  // [33.0, 132.8],
  // [34.6, 134.0]
-  [33.0, 132.8],
+  [32.42, 132.5],
   [34.44, 134.63]
 );
 
