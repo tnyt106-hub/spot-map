@@ -86,30 +86,28 @@ if (locateBtn) {
     }
 
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
+  (pos) => {
+    const lat = pos.coords.latitude;
+    const lng = pos.coords.longitude;
 
-        // 現在地へ移動
-        map.setView([lat, lng], 14);
+    map.flyTo([lat, lng], 14, { animate: true });
 
-        // 既存マーカー削除
-        if (currentMarker) {
-          map.removeLayer(currentMarker);
-        }
-        // 現在地マーカー
-        currentMarker = L.marker([lat, lng], {
-          title: "現在地",
-        })
-          .addTo(map)
-          .bindPopup("📍 現在地")
-          .openPopup();
-      },
-      (err) => {
-        alert("現在地を取得できませんでした");
-        console.error(err);
-      }
-    );
+    if (currentMarker) map.removeLayer(currentMarker);
+
+    currentMarker = L.marker([lat, lng])
+      .addTo(map)
+      .bindPopup("📍 現在地")
+      .openPopup();
+  },
+  (err) => {
+    alert("現在地を取得できませんでした");
+  },
+  {
+    enableHighAccuracy: false, // ★最重要
+    timeout: 8000,
+    maximumAge: 300000         // 5分キャッシュ
+  }
+);
   });
 } else {
   console.warn("locate-btn が見つかりません");
