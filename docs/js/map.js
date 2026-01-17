@@ -17,12 +17,18 @@ setTimeout(() => {
 
 //L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 //  attribution: "© OpenStreetMap contributors",
-L.tileLayer(
-  "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-  {
-    attribution: "© OpenStreetMap © CARTO",
+//}).addTo(map);
+const baseMaps = {
+  "標準": L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"),
+  "観光向け": L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"),
+  "航空写真": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}")
+};
 
-}).addTo(map);
+baseMaps["観光向け"].addTo(map);
+
+L.control.layers(baseMaps).addTo(map);
+
+
 
 const markers = L.markerClusterGroup();
 
