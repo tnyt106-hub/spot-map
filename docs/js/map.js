@@ -66,46 +66,6 @@ fetch("./data/spots.json")
     alert("spots.json の読み込みに失敗しました");
   });
 
-/* =========================
-   ピンのカスタムクラスタ
-========================= */
-.custom-cluster {
-  background: none;
-}
-
-.cluster {
-  border-radius: 50%;
-  color: #fff;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
-  /* 影で「広がり」感 */
-  box-shadow: 0 0 0 6px rgba(0, 136, 255, 0.2),
-              0 0 0 14px rgba(0, 136, 255, 0.15);
-}
-
-/* サイズ別 */
-.cluster.small {
-  width: 36px;
-  height: 36px;
-  background: #3ba4ff;
-}
-
-.cluster.medium {
-  width: 48px;
-  height: 48px;
-  background: #1e88e5;
-}
-
-.cluster.large {
-  width: 60px;
-  height: 60px;
-  background: #0d47a1;
-}
-
-
 // =======================
 // 現在地取得ロジック
 // =======================
