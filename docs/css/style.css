@@ -69,3 +69,23 @@ h2 {
 #locate-btn:hover {
   background: #f0f0f0;
 }
+
+/* =========================
+   スマホ最適化
+========================= */
+@media (max-width: 768px) {
+
+  h1 {
+    font-size: 18px;
+    margin: 8px 12px 2px;
+  }
+
+  h1 + p {
+    font-size: 12px;
+    margin: 0 12px 6px;
+  }
+
+  #map {
+    height: 70vh; /* ← 地図を主役に */
+  }
+}
