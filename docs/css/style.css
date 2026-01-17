@@ -109,7 +109,13 @@ h2 {
   #map {height: 70vh;}
   .map-wrapper {height: 70vh;}
 }
-/* 試験公開用フッター */
+/* 試験公開用文言*/
+.site-notice {
+  margin: 4px 12px 8px;
+  font-size: 11px;
+  color: #777;
+}
+
 .trial-footer {
   position: fixed;
   bottom: 0;
