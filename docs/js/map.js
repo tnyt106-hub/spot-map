@@ -26,6 +26,12 @@ baseMaps["標準1"].addTo(map);
 L.control.layers(baseMaps).addTo(map);
 const markers = L.markerClusterGroup();
 
+
+// =======================
+// 検索ボックス用
+// =======================
+let allSpots = [];
+
 // =======================
 // スポット読み込み
 // =======================
@@ -35,6 +41,7 @@ fetch("./data/spots.json")
     return res.json();
   })
   .then(spots => {
+    allSpots = spots;   // 検索ボックス用
     console.log("spots:", spots.length);
 
     spots.forEach(s => {
@@ -106,3 +113,24 @@ if (locateBtn) {
   console.warn("locate-btn が見つかりません");
 }
 
+// =======================
+// 検索ボックス処理
+// =======================
+const searchInput = document.getElementById("search-input");
+
+if (searchInput) {
+  searchInput.addEventListener("change", () => {
+    const keyword = searchInput.value.trim();
+    if (!keyword) return;
+
+    const hit = allSpots.find(s =>
+      s.name && s.name.includes(keyword)
+    );
+
+    if (hit) {
+      map.setView([hit.lat, hit.lng], 15);
+    } else {
+      alert("該当するスポットが見つかりません");
+    }
+  });
+}
