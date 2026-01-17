@@ -54,7 +54,7 @@ h2 {
 
 /* ピンアイコン */
 #locate-btn .icon {
-  font-size: 20px;
+  font-size: 22px;
   line-height: 1;
   margin: 0;
 }
@@ -62,7 +62,7 @@ h2 {
 #locate-btn .label {
   font-size: 9px;   
   line-height: 1;
-  margin-top: 1px;
+  margin-top: -1px;
 }
 #locate-btn:hover {
   background: #f0f0f0;
