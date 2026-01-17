@@ -55,8 +55,29 @@ fetch("./data/spots.json")
         </div>
       `;
 
-      const marker = L.marker([s.lat, s.lng]).bindPopup(popupHtml);
-      markers.addLayer(marker);
+      //const marker = L.marker([s.lat, s.lng]).bindPopup(popupHtml);
+      //markers.addLayer(marker);
+      //////////////////////////////////////////////////////////
+// クラスタ生成（JS側）
+const markers = L.markerClusterGroup({
+  iconCreateFunction: function (cluster) {
+    const count = cluster.getChildCount();
+
+    let size = "small";
+    if (count >= 100) size = "large";
+    else if (count >= 30) size = "medium";
+
+    return L.divIcon({
+      html: `<div class="cluster ${size}">${count}</div>`,
+      className: "custom-cluster",
+      iconSize: L.point(50, 50),
+    });
+  },
+});
+
+      //////////////////////////////////////////////////////////
+
+      
     });
 
     map.addLayer(markers);
