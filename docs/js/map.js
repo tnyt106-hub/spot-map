@@ -20,7 +20,7 @@ setTimeout(() => {
 //}).addTo(map);
 const baseMaps = {
   "標準": L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"),
-  "観光向け": L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"),
+  "観光向け": L.tileLayer("https://{s}.tile.openstreetmap.jp/{z}/{x}/{y}.png"),
   "航空写真": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}")
 };
 
