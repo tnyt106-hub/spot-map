@@ -62,16 +62,16 @@ fetch("./data/spots.json")
         </div>
       `;*/
     ////////////////////////////////////////////////////  // Googleマップのルート検索用URLを生成
-const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}`; [1]
+const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}`; 
 
 const popupHtml = `
     <div class="popup-content">
         <strong>${s.name ?? "名称不明"}</strong><br>
         <span style="font-size: 0.8em; color: #666;">${s.category ?? ""}</span><br>
-        ${s.image ? `<img src="${s.image}" style="width:100%; height:auto; margin-top:5px; border-radius:4px;">` : ""} [1]
-        ${s.description ? `<p style="margin: 8px 0; font-size: 0.9em;">${s.description}</p>` : ""} [1]
+        ${s.image ? `<img src="${s.image}" style="width:100%; height:auto; margin-top:5px; border-radius:4px;">` : ""} 
+        ${s.description ? `<p style="margin: 8px 0; font-size: 0.9em;">${s.description}</p>` : ""} 
         <div style="margin-top:10px; display:flex; gap:5px; flex-wrap:wrap;">
-            ${s.url ? `<a href="${s.url}" target="_blank" class="popup-link-btn">詳細を見る</a>` : ""} [1]
+            ${s.url ? `<a href="${s.url}" target="_blank" class="popup-link-btn">詳細を見る</a>` : ""} 
             <a href="${googleMapsUrl}" target="_blank" class="popup-link-btn route-btn">Googleマップでルート検索</a>
         </div>
     </div>
