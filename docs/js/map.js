@@ -17,15 +17,12 @@ setTimeout(() => {
 
 //地図レイヤ切り替えロジック
 const baseMaps = {
-  "標準": L.tileLayer("https://{s}.tile.openstreetmap.js/{z}/{x}/{y}.png"),
+  "標準": L.tileLayer("https://{s}.tile.openstreetmap.jp/{z}/{x}/{y}.png"),
   "道路": L.tileLayer("https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png"),
   "航空写真": L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}")
 };
 baseMaps["観光向け"].addTo(map);
 L.control.layers(baseMaps).addTo(map);
-
-
-
 const markers = L.markerClusterGroup();
 
 // =======================
