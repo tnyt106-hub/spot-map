@@ -61,6 +61,7 @@ h2 {
   width: 180px;
 }
 #search-suggestions {
+  background: #fff; 
   list-style: none;
   margin: 4px 0 0;
   padding: 0;
@@ -69,6 +70,7 @@ h2 {
   border: 1px solid #ccc;
 }
 #search-suggestions li {
+  background: #fff;  
   padding: 6px;
   cursor: pointer;
 }
