@@ -66,3 +66,49 @@ fetch("./data/spots.json")
     console.error(err);
     alert("spots.json の読み込みに失敗しました");
   });
+
+// =======================
+// 現在地取得ロジック
+// =======================
+let currentMarker = null;
+
+const locateBtn = document.getElementById("locate-btn");
+
+if (locateBtn) {
+  locateBtn.addEventListener("click", () => {
+    if (!navigator.geolocation) {
+      alert("このブラウザは位置情報に対応していません");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+
+        // 現在地へ移動
+        map.setView([lat, lng], 14);
+
+        // 既存マーカー削除
+        if (currentMarker) {
+          map.removeLayer(currentMarker);
+        }
+
+        // 現在地マーカー
+        currentMarker = L.marker([lat, lng], {
+          title: "現在地",
+        })
+          .addTo(map)
+          .bindPopup("📍 現在地")
+          .openPopup();
+      },
+      (err) => {
+        alert("現在地を取得できませんでした");
+        console.error(err);
+      }
+    );
+  });
+} else {
+  console.warn("locate-btn が見つかりません");
+}
+
