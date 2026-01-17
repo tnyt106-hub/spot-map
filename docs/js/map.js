@@ -119,7 +119,7 @@ if (locateBtn) {
 const searchInput = document.getElementById("search-input");
 
 if (searchInput) {
-  searchInput.addEventListener("change", () => {
+  searchInput.addEventListener("input", () => {
     const keyword = searchInput.value.trim();
     if (!keyword) return;
 
