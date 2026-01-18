@@ -47,6 +47,73 @@ const markers = L.markerClusterGroup({
 // =======================
 let allSpots = [];
 let markerEntries = [];
+
+function createPopupContent(spot) {
+  const container = document.createElement("div");
+  container.className = "popup-content";
+
+  const title = document.createElement("strong");
+  title.textContent = spot.name ?? "名称不明";
+  container.appendChild(title);
+  container.appendChild(document.createElement("br"));
+
+  if (spot.category) {
+    const category = document.createElement("span");
+    category.style.fontSize = "0.8em";
+    category.style.color = "#666";
+    category.textContent = spot.category;
+    container.appendChild(category);
+    container.appendChild(document.createElement("br"));
+  }
+
+  if (spot.image) {
+    const image = document.createElement("img");
+    image.src = spot.image;
+    image.alt = spot.name ?? "スポット画像";
+    image.style.width = "100%";
+    image.style.height = "auto";
+    image.style.marginTop = "5px";
+    image.style.borderRadius = "4px";
+    container.appendChild(image);
+  }
+
+  if (spot.description) {
+    const description = document.createElement("p");
+    description.style.margin = "8px 0";
+    description.style.fontSize = "0.9em";
+    description.textContent = spot.description;
+    container.appendChild(description);
+  }
+
+  const links = document.createElement("div");
+  links.style.marginTop = "10px";
+  links.style.display = "flex";
+  links.style.gap = "5px";
+  links.style.flexWrap = "wrap";
+
+  if (spot.url) {
+    const detailLink = document.createElement("a");
+    detailLink.href = spot.url;
+    detailLink.target = "_blank";
+    detailLink.rel = "noopener noreferrer";
+    detailLink.className = "popup-link-btn";
+    detailLink.textContent = "詳細を見る";
+    links.appendChild(detailLink);
+  }
+
+  const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${spot.lat},${spot.lng}`;
+  const routeLink = document.createElement("a");
+  routeLink.href = googleMapsUrl;
+  routeLink.target = "_blank";
+  routeLink.rel = "noopener noreferrer";
+  routeLink.className = "popup-link-btn route-btn";
+  routeLink.textContent = "Googleマップでルート検索";
+  links.appendChild(routeLink);
+
+  container.appendChild(links);
+
+  return container;
+}
 // =======================
 // スポット読み込み
 // =======================
@@ -61,24 +128,8 @@ fetch("./data/spots.json")
 
     spots.forEach(s => {
       if (!s.lat || !s.lng) return;
-    ////////////////////////////////////////////////////  // Googleマップのルート検索用URLを生成
-const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}`; 
-
-const popupHtml = `
-    <div class="popup-content">
-        <strong>${s.name ?? "名称不明"}</strong><br>
-        <span style="font-size: 0.8em; color: #666;">${s.category ?? ""}</span><br>
-        ${s.image ? `<img src="${s.image}" style="width:100%; height:auto; margin-top:5px; border-radius:4px;">` : ""} 
-        ${s.description ? `<p style="margin: 8px 0; font-size: 0.9em;">${s.description}</p>` : ""} 
-        <div style="margin-top:10px; display:flex; gap:5px; flex-wrap:wrap;">
-            ${s.url ? `<a href="${s.url}" target="_blank" class="popup-link-btn">詳細を見る</a>` : ""} 
-            <a href="${googleMapsUrl}" target="_blank" class="popup-link-btn route-btn">Googleマップでルート検索</a>
-        </div>
-    </div>
-`;
-/////////////////////////////////////////////////////////////////////////////
-      
-      const marker = L.marker([s.lat, s.lng]).bindPopup(popupHtml);
+      const popupContent = createPopupContent(s);
+      const marker = L.marker([s.lat, s.lng]).bindPopup(popupContent);
       markers.addLayer(marker);
 
       markerEntries.push({marker,name: s.name ?? ""});//検索ボックス用
@@ -205,6 +256,5 @@ function executeSearch() {
 searchInput.addEventListener("keydown", e => {
   if (e.key === "Enter") executeSearch();
 });
-
 
 
