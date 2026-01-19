@@ -269,10 +269,14 @@ const suggestions = document.getElementById("search-suggestions");
 const clearBtn = document.getElementById("search-clear");
 function updateClearButton() {
   if (!clearBtn) return;
+  // 検索入力欄が存在しない場合は何もしない（HTML変更時の保険）
+  if (!searchInput) return;
   clearBtn.style.display = searchInput.value.trim() ? "block" : "none";
 }
 if (clearBtn) {
   clearBtn.addEventListener("click", () => {
+    // 検索入力欄が存在しない場合は何もしない（HTML変更時の保険）
+    if (!searchInput) return;
     searchInput.value = "";
     clearSuggestions();
     updateClearButton();
@@ -282,6 +286,8 @@ if (clearBtn) {
   });
 }
 function clearSuggestions() {
+  // サジェスト欄が存在しない場合は何もしない（HTML変更時の保険）
+  if (!suggestions) return;
   suggestions.innerHTML = "";
 }
 function focusMarker(marker, spot) {
@@ -304,14 +310,20 @@ function showSuggestions(keyword) {
       focusMarker(e.marker, e.spot); // ←spotも渡す(地図下表示用)
       clearSuggestions();
     });
+    // サジェスト欄が存在しない場合は追加しない（HTML変更時の保険）
+    if (!suggestions) return;
     suggestions.appendChild(li);
   });
 }
-searchInput.addEventListener("input", () => {
-  updateClearButton();
-  showSuggestions(searchInput.value.trim());
-});
+if (searchInput) {
+  searchInput.addEventListener("input", () => {
+    updateClearButton();
+    showSuggestions(searchInput.value.trim());
+  });
+}
 function executeSearch() {
+  // 検索入力欄が存在しない場合は何もしない（HTML変更時の保険）
+  if (!searchInput) return;
   const keyword = searchInput.value.trim();
   clearSuggestions();
 
@@ -335,7 +347,9 @@ function executeSearch() {
   }
   updateClearButton();
 }
-searchInput.addEventListener("keydown", e => {
-  if (e.key === "Enter") executeSearch();
-});
+if (searchInput) {
+  searchInput.addEventListener("keydown", e => {
+    if (e.key === "Enter") executeSearch();
+  });
+}
 updateClearButton();
