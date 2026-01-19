@@ -191,6 +191,7 @@ fetch("./data/spots.json")
       if (!s.lat || !s.lng) return;
       const popupContent = createPopupContent(s);
       const marker = L.marker([s.lat, s.lng]).bindPopup(popupContent);
+      marker.on("click", () => renderSpotPanel(s)); // 地図下表示用
       markers.addLayer(marker);
 
       markerEntries.push({marker,name: s.name ?? ""});//検索ボックス用
