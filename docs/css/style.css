@@ -293,6 +293,21 @@ h2 {
     font-size: 16px;
   }
 }
+/*フッター被り対策 */
 main {
   padding-bottom: 44px;
 }
+
+/* spot-panel の Google ボタンを強調 */
+.spot-panel .btn-google {
+  background: #34a853;
+  border-color: #34a853;
+  color: #fff;
+  font-weight: 700;
+}
+
+.spot-panel .btn-google:hover {
+  background: #2d8a46;
+  border-color: #2d8a46;
+}
+
