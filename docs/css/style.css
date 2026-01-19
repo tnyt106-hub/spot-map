@@ -145,6 +145,17 @@ h2 {
   background: #f0f0f0;
 }
 
+/* 地図上のスポット名ラベル（Leaflet tooltip） */
+.leaflet-tooltip.spot-label {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  color: #333;
+  font-size: 12px;
+  padding: 2px 8px;
+}
+
 /* =========================
    スマホ最適化
 ========================= */
