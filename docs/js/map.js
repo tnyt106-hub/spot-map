@@ -378,10 +378,15 @@ function executeSearch() {
     firstHit.openPopup();
     if (firstHitSpot) renderSpotPanel(firstHitSpot);
   }
+  updateClearButton();
+
 }
 
 searchInput.addEventListener("keydown", e => {
   if (e.key === "Enter") executeSearch();
 });
+
+updateClearButton();
+
 
 
