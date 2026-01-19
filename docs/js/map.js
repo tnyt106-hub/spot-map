@@ -1,6 +1,22 @@
 console.log("map.js loaded");
 
 // =======================
+// GA4 helper（最小）
+// =======================
+function gaPageView(pagePath, title) {
+  if (typeof window.gtag !== "function") return; // GA未読込なら何もしない
+  window.gtag("event", "page_view", {
+    page_path: pagePath,
+    page_title: title
+  });
+}
+
+function gaEvent(name, params = {}) {
+  if (typeof window.gtag !== "function") return;
+  window.gtag("event", name, params);
+}
+
+// =======================
 // 地図初期化
 // =======================
 const shikokuBounds = L.latLngBounds(
@@ -10,6 +26,8 @@ const shikokuBounds = L.latLngBounds(
 
 const map = L.map("map", {zoomControl: false});
 map.fitBounds(shikokuBounds, { padding: [1, 1] });
+
+gaPageView("/map", document.title);// GA4 helper（最小）
 
 setTimeout(() => {
   map.invalidateSize();
