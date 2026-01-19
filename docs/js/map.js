@@ -302,6 +302,24 @@ if (locateBtn) {
 // =======================
 const searchInput = document.getElementById("search-input");
 const suggestions = document.getElementById("search-suggestions");
+const clearBtn = document.getElementById("search-clear");
+
+function updateClearButton() {
+  if (!clearBtn) return;
+  clearBtn.style.display = searchInput.value.trim() ? "block" : "none";
+}
+if (clearBtn) {
+  clearBtn.addEventListener("click", () => {
+    searchInput.value = "";
+    clearSuggestions();
+    updateClearButton();
+
+    // 全件に戻す（既存の×と同じ効果）
+    clearSpotPanel();  // ※あなたのclearSpotPanelは全件復帰＋fitBoundsまでやってるのでこれでOK
+
+    searchInput.focus();
+  });
+}
 
 function clearSuggestions() {
   suggestions.innerHTML = "";
@@ -314,7 +332,6 @@ function focusMarker(marker, spot) {
   marker.openPopup();
   if (spot) renderSpotPanel(spot); // 地図下更新用
 }
-
 
 function showSuggestions(keyword) {
   clearSuggestions();
@@ -335,6 +352,7 @@ function showSuggestions(keyword) {
   });
 }
 searchInput.addEventListener("input", () => {
+  updateClearButton();
   showSuggestions(searchInput.value.trim());
 });
 function executeSearch() {
