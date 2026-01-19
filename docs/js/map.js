@@ -93,8 +93,8 @@ function clearSpotPanel() {
 // 地図初期化
 // =======================
 const shikokuBounds = L.latLngBounds(
-  [32.90, 132.10],  // 南西
-  [34.45, 134.45]   // 北東
+  [32.75, 132.10],  // 南を少し広げる（32.90 → 32.75）
+  [34.60, 134.45]   // 北を少し広げる（34.45 → 34.60）
 );
 const map = L.map("map", {
   zoomControl: false,
