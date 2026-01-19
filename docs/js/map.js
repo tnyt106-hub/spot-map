@@ -28,21 +28,28 @@ function renderSpotPanel(spot) {
   const detail = document.getElementById("spot-panel-detail");
   panel.classList.remove("is-empty");
   const name = spot.name ?? "名称不明";
-  title.textContent = name;
-  cat.textContent = spot.category ? `#${spot.category}` : "";
-  area.textContent =
-    (spot.prefecture || spot.municipality)
-      ? `${spot.prefecture ?? ""}${spot.municipality ? " " + spot.municipality : ""}`
-      : "";
-  desc.textContent = spot.description ?? "";
+  // パネル内の要素が存在しない場合は個別にスキップ（HTML変更時の保険）
+  if (title) title.textContent = name;
+  if (cat) cat.textContent = spot.category ? `#${spot.category}` : "";
+  if (area) {
+    area.textContent =
+      (spot.prefecture || spot.municipality)
+        ? `${spot.prefecture ?? ""}${spot.municipality ? " " + spot.municipality : ""}`
+        : "";
+  }
+  if (desc) desc.textContent = spot.description ?? "";
   // Google（ルート検索）
-  google.href = `https://www.google.com/maps/dir/?api=1&destination=${spot.lat},${spot.lng}`;
+  if (google) {
+    google.href = `https://www.google.com/maps/dir/?api=1&destination=${spot.lat},${spot.lng}`;
+  }
   // 詳細ページ（後で作る想定：spot_idが無いなら非表示）
-  if (spot.spot_id) {
-    detail.href = `./spot/${encodeURIComponent(spot.spot_id)}.html`;
-    detail.style.display = "inline-block";
-  } else {
-    detail.style.display = "none";
+  if (detail) {
+    if (spot.spot_id) {
+      detail.href = `./spot/${encodeURIComponent(spot.spot_id)}.html`;
+      detail.style.display = "inline-block";
+    } else {
+      detail.style.display = "none";
+    }
   }
   // GA（任意：スポット表示）
   gaEvent("select_content", { content_type: "spot", item_id: spot.spot_id ?? name });
@@ -220,13 +227,32 @@ fetch("./data/spots.json")
 let currentMarker = null;
 const locateBtn = document.getElementById("locate-btn");
 if (locateBtn) {
+  const locateLabel = locateBtn.querySelector(".label");
+  // 既存ラベルを控えておき、取得中の文言変更後に戻せるようにする
+  const defaultLocateLabel = locateLabel?.textContent ?? "現在地";
+  // 現在地取得中はボタンを無効化して連打を防ぐ
+  const setLocateButtonState = (isLoading) => {
+    locateBtn.disabled = isLoading;
+    locateBtn.setAttribute("aria-busy", String(isLoading));
+    // 既存のアイコン構造を壊さないため、ラベルのみ差し替える
+    if (locateLabel) {
+      locateLabel.textContent = isLoading ? "現在地取得中..." : defaultLocateLabel;
+      return;
+    }
+    locateBtn.textContent = isLoading ? "現在地取得中..." : defaultLocateLabel;
+  };
   locateBtn.addEventListener("click", () => {
-  if (!navigator.geolocation) {
-    alert("このブラウザは位置情報に対応していません");
-    return;
-  }
-  navigator.geolocation.getCurrentPosition(
-    (pos) => {
+    if (!navigator.geolocation) {
+      alert("このブラウザは位置情報に対応していません");
+      return;
+    }
+    // 初回取得に時間がかかる端末を想定し、タイムアウトを長めに設定する
+    const buildOptions = (timeoutMs) => ({
+      enableHighAccuracy: true,
+      timeout: timeoutMs,
+      maximumAge: 0
+    });
+    const handleSuccess = (pos) => {
       const lat = pos.coords.latitude;
       const lng = pos.coords.longitude;
       map.flyTo([lat, lng], 14, { duration: 0.7 });
@@ -235,28 +261,40 @@ if (locateBtn) {
         .addTo(map)
         .bindPopup("📍 現在地")
         .openPopup();
-    },
-    (err) => {
-      // ★ 初回許可待ちの可能性が高い
+      setLocateButtonState(false);
+    };
+    const handleError = (err, didRetry) => {
+      // 許可拒否は再試行しても改善しないため即案内する
       if (err.code === err.PERMISSION_DENIED) {
         alert(
           "位置情報の使用が許可されていない可能性があります。\n" +
           "ブラウザの設定から許可してください。"
         );
-      } else {
-        alert(
-          "位置情報を取得できませんでした。\n" +
-          "端末の設定を確認後、再実行してください。"
-        );
+        setLocateButtonState(false);
+        return;
       }
-    },
-    {
-      enableHighAccuracy: false,
-      timeout: 10000,
-      maximumAge: 300000
-    }
-  );
-});
+      // タイムアウトや一時的な取得失敗は1回だけ再試行する
+      if (!didRetry && (err.code === err.TIMEOUT || err.code === err.POSITION_UNAVAILABLE)) {
+        navigator.geolocation.getCurrentPosition(
+          handleSuccess,
+          (retryErr) => handleError(retryErr, true),
+          buildOptions(30000)
+        );
+        return;
+      }
+      alert(
+        "位置情報を取得できませんでした。\n" +
+        "端末の設定を確認後、再実行してください。"
+      );
+      setLocateButtonState(false);
+    };
+    setLocateButtonState(true);
+    navigator.geolocation.getCurrentPosition(
+      handleSuccess,
+      (err) => handleError(err, false),
+      buildOptions(20000)
+    );
+  });
 
 } else {
   console.warn("locate-btn が見つかりません");
@@ -269,10 +307,14 @@ const suggestions = document.getElementById("search-suggestions");
 const clearBtn = document.getElementById("search-clear");
 function updateClearButton() {
   if (!clearBtn) return;
+  // 検索入力欄が存在しない場合は何もしない（HTML変更時の保険）
+  if (!searchInput) return;
   clearBtn.style.display = searchInput.value.trim() ? "block" : "none";
 }
 if (clearBtn) {
   clearBtn.addEventListener("click", () => {
+    // 検索入力欄が存在しない場合は何もしない（HTML変更時の保険）
+    if (!searchInput) return;
     searchInput.value = "";
     clearSuggestions();
     updateClearButton();
@@ -282,6 +324,8 @@ if (clearBtn) {
   });
 }
 function clearSuggestions() {
+  // サジェスト欄が存在しない場合は何もしない（HTML変更時の保険）
+  if (!suggestions) return;
   suggestions.innerHTML = "";
 }
 function focusMarker(marker, spot) {
@@ -304,14 +348,20 @@ function showSuggestions(keyword) {
       focusMarker(e.marker, e.spot); // ←spotも渡す(地図下表示用)
       clearSuggestions();
     });
+    // サジェスト欄が存在しない場合は追加しない（HTML変更時の保険）
+    if (!suggestions) return;
     suggestions.appendChild(li);
   });
 }
-searchInput.addEventListener("input", () => {
-  updateClearButton();
-  showSuggestions(searchInput.value.trim());
-});
+if (searchInput) {
+  searchInput.addEventListener("input", () => {
+    updateClearButton();
+    showSuggestions(searchInput.value.trim());
+  });
+}
 function executeSearch() {
+  // 検索入力欄が存在しない場合は何もしない（HTML変更時の保険）
+  if (!searchInput) return;
   const keyword = searchInput.value.trim();
   clearSuggestions();
 
@@ -335,7 +385,9 @@ function executeSearch() {
   }
   updateClearButton();
 }
-searchInput.addEventListener("keydown", e => {
-  if (e.key === "Enter") executeSearch();
-});
+if (searchInput) {
+  searchInput.addEventListener("keydown", e => {
+    if (e.key === "Enter") executeSearch();
+  });
+}
 updateClearButton();
