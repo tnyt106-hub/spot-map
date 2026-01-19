@@ -194,7 +194,7 @@ fetch("./data/spots.json")
       marker.on("click", () => renderSpotPanel(s)); // 地図下表示用
       markers.addLayer(marker);
 
-      markerEntries.push({marker,name: s.name ?? ""});//検索ボックス用
+     markerEntries.push({ marker, name: s.name ?? "", spot: s });//検索ボックス用
     });
 
     map.addLayer(markers);
@@ -273,6 +273,7 @@ function focusMarker(marker) {
   markers.addLayer(marker);
   map.flyTo(marker.getLatLng(), 15);
   marker.openPopup();
+  if (spot) renderSpotPanel(spot); // 地図下更新用
 }
 
 function showSuggestions(keyword) {
@@ -287,7 +288,7 @@ function showSuggestions(keyword) {
     const li = document.createElement("li");
     li.textContent = e.name;
     li.addEventListener("click", () => {
-      focusMarker(e.marker);
+      focusMarker(e.marker, e.spot); // ←spotも渡す(地図下表示用)
       clearSuggestions();
     });
     suggestions.appendChild(li);
