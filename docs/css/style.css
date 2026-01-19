@@ -259,6 +259,29 @@ h2 {
   color: #fff;
 }
 
+/* spot-panel 閉じるボタン */
+.spot-panel__body { position: relative; }
+
+.spot-panel__close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+  line-height: 26px;
+  font-size: 18px;
+  color: #555;
+}
+
+.spot-panel__close:hover {
+  background: #f3f3f3;
+}
+
+
 /* スマホ最適化 */
 @media (max-width: 600px) {
   .spot-panel {
