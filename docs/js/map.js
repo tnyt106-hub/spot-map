@@ -83,7 +83,7 @@ function clearSpotPanel() {
   markerEntries.forEach(e => markers.addLayer(e.marker));
 
   // 地図を四国全体に戻す
-  map.fitBounds(shikokuBounds, { padding: [1, 1] });
+  map.fitBounds(shikokuBounds, { padding: [7, 7] });
 
   // 開いているポップアップも閉じる（任意だけど気持ちいい）
   map.closePopup();
@@ -101,7 +101,7 @@ const map = L.map("map", {
   maxBounds: shikokuBounds,
   maxBoundsViscosity: 1.0
 });
-map.fitBounds(shikokuBounds, { padding: [3, 3] });
+map.fitBounds(shikokuBounds, { padding: [7, 7] });
 
 gaPageView("/map", document.title);// GA4 helper（最小）
 setTimeout(() => {
