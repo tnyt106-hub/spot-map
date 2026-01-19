@@ -58,6 +58,36 @@ function renderSpotPanel(spot) {
   gaEvent("select_content", { content_type: "spot", item_id: spot.spot_id ?? name });
 }
 
+// =======================
+// 地図下スポット閉じる
+// =======================
+function clearSpotPanel() {
+  const panel = document.getElementById("spot-panel");
+  if (!panel) return;
+
+  panel.classList.add("is-empty");
+
+  const title = panel.querySelector(".spot-panel__title");
+  if (title) title.textContent = "スポット未選択";
+
+  const cat = document.getElementById("spot-panel-category");
+  const area = document.getElementById("spot-panel-area");
+  const desc = document.getElementById("spot-panel-desc");
+
+  if (cat) cat.textContent = "";
+  if (area) area.textContent = "";
+  if (desc) desc.textContent = "";
+
+  // 検索で絞り込み中でも、全件表示に戻す
+  markers.clearLayers();
+  markerEntries.forEach(e => markers.addLayer(e.marker));
+
+  // 地図を四国全体に戻す
+  map.fitBounds(shikokuBounds, { padding: [1, 1] });
+
+  // 開いているポップアップも閉じる（任意だけど気持ちいい）
+  map.closePopup();
+}
 
 // =======================
 // 地図初期化
@@ -197,7 +227,16 @@ fetch("./data/spots.json")
      markerEntries.push({ marker, name: s.name ?? "", spot: s });//検索ボックス用
     });
 
-    map.addLayer(markers);
+        map.addLayer(markers);
+
+    // ×閉じるボタン（ここで有効化：markerEntriesが埋まった後）
+    const closeBtn = document.getElementById("spot-panel-close");
+    if (closeBtn) {
+      closeBtn.addEventListener("click", () => {
+        clearSpotPanel();
+      });
+    }
+
   })
   .catch(err => {
     console.error(err);
@@ -268,13 +307,14 @@ function clearSuggestions() {
   suggestions.innerHTML = "";
 }
 
-function focusMarker(marker) {
+function focusMarker(marker, spot) {
   markers.clearLayers();
   markers.addLayer(marker);
   map.flyTo(marker.getLatLng(), 15);
   marker.openPopup();
   if (spot) renderSpotPanel(spot); // 地図下更新用
 }
+
 
 function showSuggestions(keyword) {
   clearSuggestions();
@@ -303,19 +343,25 @@ function executeSearch() {
 
   markers.clearLayers();
   let firstHit = null;
+  let firstHitSpot = null;
 
   markerEntries.forEach(e => {
     if (e.name.includes(keyword)) {
       markers.addLayer(e.marker);
-      if (!firstHit) firstHit = e.marker;
+      if (!firstHit) {
+        firstHit = e.marker;
+        firstHitSpot = e.spot;
+      }
     }
   });
 
   if (firstHit) {
     map.flyTo(firstHit.getLatLng(), 15);
     firstHit.openPopup();
+    if (firstHitSpot) renderSpotPanel(firstHitSpot);
   }
 }
+
 searchInput.addEventListener("keydown", e => {
   if (e.key === "Enter") executeSearch();
 });
