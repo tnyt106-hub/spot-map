@@ -93,12 +93,19 @@ function clearSpotPanel() {
 // 地図初期化
 // =======================
 const shikokuBounds = L.latLngBounds(
-  [32.42, 132.5],
-  [34.44, 134.63]
+  [32.70, 132.00],  // 南西（高知・愛媛南部の少し外）
+  [34.60, 134.60]   // 北東（香川・徳島北部の少し外）
 );
 
-const map = L.map("map", {zoomControl: false});
-map.fitBounds(shikokuBounds, { padding: [1, 1] });
+const map = L.map("map", {
+  zoomControl: false,
+  maxBounds: shikokuBounds,
+  maxBoundsViscosity: 1.0
+});
+
+
+map.fitBounds(shikokuBounds, { padding: [20, 20] });
+
 
 gaPageView("/map", document.title);// GA4 helper（最小）
 
