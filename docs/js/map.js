@@ -70,8 +70,7 @@ function clearSpotPanel() {
   if (area) area.textContent = "";
   if (desc) desc.textContent = "";
   // 検索で絞り込み中でも、全件表示に戻す
-  markers.clearLayers();
-  markerEntries.forEach(e => markers.addLayer(e.marker));
+  setVisibleEntries(markerEntries);
   // 地図を“ホーム表示”に戻す（見栄えが毎回安定）
   const isWide = window.matchMedia("(min-width: 1024px)").matches;
   map.setView(HOME_CENTER, isWide ? HOME_ZOOM_PC : HOME_ZOOM_MOBILE);
@@ -129,6 +128,21 @@ const markers = L.markerClusterGroup({
 // =======================
 let allSpots = [];
 let markerEntries = [];
+let visibleEntries = [];
+let pinnedEntry = null; // 直前に選択されたスポットを保持して、次のピン操作まで固定する
+function setVisibleEntries(entries) {
+  // 検索やリセットのたびに「いま表示しているマーカー群」を同期する
+  visibleEntries = entries;
+  markers.clearLayers();
+  visibleEntries.forEach(e => markers.addLayer(e.marker));
+}
+function onSpotSelect(entry) {
+  // ピン/ラベルのどちらからでも同一の選択処理にする（挙動の統一）
+  if (!entry) return;
+  pinnedEntry = entry;
+  entry.marker.openPopup();
+  renderSpotPanel(entry.spot);
+}
 function createPopupContent(spot) {
   const container = document.createElement("div");
   container.className = "popup-content";
@@ -212,14 +226,27 @@ fetch("./data/spots.json")
         direction: "top",
         className: "spot-label",
         offset: [0, -12],
-        opacity: 0.9
+        opacity: 0.9,
+        interactive: true
       });
-      marker.on("click", () => renderSpotPanel(s)); // 地図下表示用
+      const entry = { marker, name: s.name ?? "", spot: s };
+      marker.on("click", () => onSpotSelect(entry)); // 地図下表示用
+      marker.on("tooltipopen", (event) => {
+        // ラベルDOMが生成されたタイミングでクリック操作を紐付ける
+        const tooltipElement = event.tooltip?.getElement();
+        if (!tooltipElement) return;
+        if (tooltipElement.dataset.clickBound === "true") return;
+        tooltipElement.dataset.clickBound = "true";
+        tooltipElement.addEventListener("click", () => {
+          onSpotSelect(entry);
+        });
+      });
       markers.addLayer(marker);
 
-     markerEntries.push({ marker, name: s.name ?? "", spot: s });//検索ボックス用
+     markerEntries.push(entry);//検索ボックス用
     });
         map.addLayer(markers);
+        setVisibleEntries(markerEntries);
     // ×閉じるボタン（ここで有効化：markerEntriesが埋まった後）
     const closeBtn = document.getElementById("spot-panel-close");
     if (closeBtn) {
@@ -340,12 +367,11 @@ function clearSuggestions() {
   if (!suggestions) return;
   suggestions.innerHTML = "";
 }
-function focusMarker(marker, spot) {
-  markers.clearLayers();
-  markers.addLayer(marker);
-  map.flyTo(marker.getLatLng(), 15);
-  marker.openPopup();
-  if (spot) renderSpotPanel(spot); // 地図下更新用
+function focusMarker(entry) {
+  // サジェスト経由でも、表示中のマーカー群と選択状態を一貫させる
+  setVisibleEntries([entry]);
+  map.flyTo(entry.marker.getLatLng(), 15);
+  onSpotSelect(entry);
 }
 function showSuggestions(keyword) {
   clearSuggestions();
@@ -357,7 +383,7 @@ function showSuggestions(keyword) {
     const li = document.createElement("li");
     li.textContent = e.name;
     li.addEventListener("click", () => {
-      focusMarker(e.marker, e.spot); // ←spotも渡す(地図下表示用)
+      focusMarker(e); // ←spotも渡す(地図下表示用)
       clearSuggestions();
     });
     // サジェスト欄が存在しない場合は追加しない（HTML変更時の保険）
@@ -377,23 +403,21 @@ function executeSearch() {
   const keyword = searchInput.value.trim();
   clearSuggestions();
 
-  markers.clearLayers();
+  const matchedEntries = [];
   let firstHit = null;
-  let firstHitSpot = null;
 
   markerEntries.forEach(e => {
     if (e.name.includes(keyword)) {
-      markers.addLayer(e.marker);
+      matchedEntries.push(e);
       if (!firstHit) {
-        firstHit = e.marker;
-        firstHitSpot = e.spot;
+        firstHit = e;
       }
     }
   });
+  setVisibleEntries(matchedEntries);
   if (firstHit) {
-    map.flyTo(firstHit.getLatLng(), 15);
-    firstHit.openPopup();
-    if (firstHitSpot) renderSpotPanel(firstHitSpot);
+    map.flyTo(firstHit.marker.getLatLng(), 15);
+    onSpotSelect(firstHit);
   }
   updateClearButton();
 }
