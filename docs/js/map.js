@@ -97,8 +97,8 @@ const shikokuBounds = L.latLngBounds(
 );
 // 2) 初期表示・戻る用（見栄えを固定）
 const HOME_CENTER = [33.75, 133.65]; // 四国の中心付近
-const HOME_ZOOM_PC = 7;              // PCは少し寄せる
-const HOME_ZOOM_MOBILE = 7;          // 必要なら 8 に
+const HOME_ZOOM_PC = 8;              // PCは少し寄せる
+const HOME_ZOOM_MOBILE = 8;          // 必要なら 8 に
 const map = L.map("map", {
   zoomControl: false,
   maxBounds: shikokuBounds,
