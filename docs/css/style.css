@@ -355,9 +355,14 @@ h2 {
 
 /* ルート検索ボタン（Googleカラーの緑系） */
 .route-btn {
-    background-color: #34a853;
+  background-color: #34a853;
+}
 
-  /* =======================
+.route-btn:hover {
+  background-color: #2d8a46;
+}
+
+/* =======================
    地図下スポット表示欄
    ======================= */
 
@@ -445,14 +450,3 @@ h2 {
   }
 }
 
-}
-
-.route-btn:hover {
-    background-color: #2d8a46;
-}
-
-}
-
-.route-btn:hover {
-    background-color: #2d8a46;
-}
