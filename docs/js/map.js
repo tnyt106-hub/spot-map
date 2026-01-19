@@ -77,38 +77,37 @@ function clearSpotPanel() {
   if (cat) cat.textContent = "";
   if (area) area.textContent = "";
   if (desc) desc.textContent = "";
-
   // 検索で絞り込み中でも、全件表示に戻す
   markers.clearLayers();
   markerEntries.forEach(e => markers.addLayer(e.marker));
-
-  // 地図を四国全体に戻す
-  map.fitBounds(shikokuBounds, {
-  paddingTopLeft: [6, 10],
-  paddingBottomRight: [6, 10],
-  maxZoom: 7
-});
-  // 開いているポップアップも閉じる（任意だけど気持ちいい）
+  // 地図を“ホーム表示”に戻す（見栄えが毎回安定）
+  const isWide = window.matchMedia("(min-width: 1024px)").matches;
+  map.setView(HOME_CENTER, isWide ? HOME_ZOOM_PC : HOME_ZOOM_MOBILE);
+  // 開いているポップアップも閉じる（任意だけど気持ちいい
   map.closePopup();
 }
 
 // =======================
 // 地図初期化
 // =======================
+// 1) 操作制限用（少し広めにして“窮屈さ”を減らす）
 const shikokuBounds = L.latLngBounds(
-  [32.82, 132.10],  // 南：32.75 → 32.82（少し詰める）
-  [34.52, 134.45]   // 北：34.60 → 34.52（少し詰める）
+  [32.65, 131.95],
+  [34.70, 134.75]
 );
+// 2) 初期表示・戻る用（見栄えを固定）
+const HOME_CENTER = [33.75, 133.65]; // 四国の中心付近
+const HOME_ZOOM_PC = 7;              // PCは少し寄せる
+const HOME_ZOOM_MOBILE = 7;          // 必要なら 8 に
 const map = L.map("map", {
   zoomControl: false,
   maxBounds: shikokuBounds,
   maxBoundsViscosity: 0.7
 });
-map.fitBounds(shikokuBounds, {
-  paddingTopLeft: [2, 7],
-  paddingBottomRight: [2, 7],
-  maxZoom: 7
-});
+
+const isWide = window.matchMedia("(min-width: 1024px)").matches;
+map.setView(HOME_CENTER, isWide ? HOME_ZOOM_PC : HOME_ZOOM_MOBILE);
+
 
 gaPageView("/map", document.title);// GA4 helper（最小）
 setTimeout(() => {
