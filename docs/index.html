@@ -56,11 +56,29 @@
        <span class="label">現在地</span>
      </button>
     <div id="map"></div>
+<section id="spot-panel" class="spot-panel is-empty" aria-live="polite">
+  <div class="spot-panel__body">
+    <div class="spot-panel__kicker">地図でスポットを選択するとここに表示されます</div>
+    <h2 class="spot-panel__title">スポット未選択</h2>
+
+    <div class="spot-panel__meta">
+      <span id="spot-panel-category"></span>
+      <span id="spot-panel-area"></span>
+    </div>
+
+    <p id="spot-panel-desc" class="spot-panel__desc"></p>
+
+    <div class="spot-panel__actions">
+      <a id="spot-panel-google" class="btn" href="#" target="_blank" rel="noopener noreferrer">Googleマップ</a>
+      <a id="spot-panel-detail" class="btn btn-primary" href="#" target="_self">詳細を見る</a>
+    </div>
+  </div>
+</section>
+
       
       </div>
   </section>
 </main>
-
 
   <!-- Leaflet JS（必ず map.js より前） -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -68,10 +86,9 @@
   <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
   <!-- 自前JS -->
   <script src="js/map.js"></script>
-  <!-- フッターは body 内に置くのが正しい構造です -->
+  <!-- フッター-->
   <footer class="trial-footer">
     ※ 本サイトは開発中の試験公開版です。内容は予告なく変更される場合があります。
   </footer>
-
 </body>
 </html>
