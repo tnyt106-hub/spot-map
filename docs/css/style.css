@@ -79,6 +79,33 @@ h2 {
   background: #f0f0f0;
 }
 
+/* 検索クリアボタン（入力欄右端） */
+.search-input-wrapper {
+  position: relative;
+}
+
+#search-clear {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+  line-height: 20px;
+  font-size: 16px;
+  color: #666;
+  display: none; /* 入力がある時だけ表示 */
+}
+
+#search-clear:hover {
+  background: #f3f3f3;
+}
+
+
 /*現在地ボタン-------------------------------------------------  */
 #locate-btn {
   position: absolute;
