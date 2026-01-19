@@ -101,7 +101,7 @@ const map = L.map("map", {
   maxBounds: shikokuBounds,
   maxBoundsViscosity: 1.0
 });
-map.fitBounds(shikokuBounds, { padding: [10, 10] });
+map.fitBounds(shikokuBounds, { padding: [3, 3] });
 
 gaPageView("/map", document.title);// GA4 helper（最小）
 setTimeout(() => {
