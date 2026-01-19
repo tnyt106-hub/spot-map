@@ -186,6 +186,10 @@ function createPopupContent(spot) {
   container.appendChild(links);
   return container;
 }
+function createMarkerLabelText(spot) {
+  // ラベル用の表示名は「不明」になる時も一貫して出す（初心者向けに分かりやすく）
+  return spot.name ?? "名称不明";
+}
 // =======================
 // スポット読み込み
 // =======================
@@ -202,6 +206,14 @@ fetch("./data/spots.json")
       if (!s.lat || !s.lng) return;
       const popupContent = createPopupContent(s);
       const marker = L.marker([s.lat, s.lng]).bindPopup(popupContent);
+      // マーカー上にスポット名を常時表示（絞り込み後も表示中のマーカーのみ出る）
+      marker.bindTooltip(createMarkerLabelText(s), {
+        permanent: true,
+        direction: "top",
+        className: "spot-label",
+        offset: [0, -12],
+        opacity: 0.9
+      });
       marker.on("click", () => renderSpotPanel(s)); // 地図下表示用
       markers.addLayer(marker);
 
