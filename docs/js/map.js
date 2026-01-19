@@ -84,12 +84,10 @@ function clearSpotPanel() {
 
   // 地図を四国全体に戻す
   map.fitBounds(shikokuBounds, {
-  paddingTopLeft: [5, 7],
-  paddingBottomRight: [5, 7],
+  paddingTopLeft: [6, 10],
+  paddingBottomRight: [6, 10],
   maxZoom: 7
 });
-
-
   // 開いているポップアップも閉じる（任意だけど気持ちいい）
   map.closePopup();
 }
@@ -104,11 +102,11 @@ const shikokuBounds = L.latLngBounds(
 const map = L.map("map", {
   zoomControl: false,
   maxBounds: shikokuBounds,
-  maxBoundsViscosity: 1.0
+  maxBoundsViscosity: 0.7
 });
 map.fitBounds(shikokuBounds, {
-  paddingTopLeft: [5, 7],
-  paddingBottomRight: [5, 7],
+  paddingTopLeft: [2, 7],
+  paddingBottomRight: [2, 7],
   maxZoom: 7
 });
 
