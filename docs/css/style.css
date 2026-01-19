@@ -293,10 +293,6 @@ h2 {
     font-size: 16px;
   }
 }
-/*フッター被り対策 */
-main {
-  padding-bottom: 44px;
-}
 
 /* spot-panel の Google ボタンを強調 */
 .spot-panel .btn-google {
@@ -311,3 +307,12 @@ main {
   border-color: #2d8a46;
 }
 
+/* 未選択時だけガイド文を表示（選択中は隠す） */
+.spot-panel:not(.is-empty) .spot-panel__kicker {
+  display: none;
+}
+
+/*フッター被り対策 */
+main {
+  padding-bottom: 44px;
+}
