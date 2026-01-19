@@ -17,6 +17,49 @@ function gaEvent(name, params = {}) {
 }
 
 // =======================
+// 地図下スポット表示欄
+// =======================
+function renderSpotPanel(spot) {
+  const panel = document.getElementById("spot-panel");
+  if (!panel) return; // HTML側が未設置なら何もしない
+
+  const title = panel.querySelector(".spot-panel__title");
+  const cat = document.getElementById("spot-panel-category");
+  const area = document.getElementById("spot-panel-area");
+  const desc = document.getElementById("spot-panel-desc");
+  const google = document.getElementById("spot-panel-google");
+  const detail = document.getElementById("spot-panel-detail");
+
+  panel.classList.remove("is-empty");
+
+  const name = spot.name ?? "名称不明";
+  title.textContent = name;
+
+  cat.textContent = spot.category ? `#${spot.category}` : "";
+  area.textContent =
+    (spot.prefecture || spot.municipality)
+      ? `${spot.prefecture ?? ""}${spot.municipality ? " " + spot.municipality : ""}`
+      : "";
+
+  desc.textContent = spot.description ?? "";
+
+  // Google（ルート検索）
+  google.href = `https://www.google.com/maps/dir/?api=1&destination=${spot.lat},${spot.lng}`;
+
+  // 詳細ページ（後で作る想定：spot_idが無いなら非表示）
+  if (spot.spot_id) {
+    detail.href = `./spot/${encodeURIComponent(spot.spot_id)}.html`;
+    detail.style.display = "inline-block";
+  } else {
+    detail.style.display = "none";
+  }
+
+  // GA（任意：スポット表示）
+  gaEvent("select_content", { content_type: "spot", item_id: spot.spot_id ?? name });
+}
+
+
+// =======================
 // 地図初期化
 // =======================
 const shikokuBounds = L.latLngBounds(
