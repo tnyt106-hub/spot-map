@@ -413,11 +413,21 @@ main {
   font-size: 22px;
 }
 
-.spot-description {
+.spot-intro {
   margin: 0 0 16px;
+}
+
+.spot-intro__title {
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+
+.spot-intro__text {
+  margin: 0;
   font-size: 14px;
   line-height: 1.7;
   color: #333;
+  white-space: pre-line;
 }
 
 .spot-actions {
