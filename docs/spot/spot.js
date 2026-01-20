@@ -9,7 +9,7 @@ const spotId = params.get("spot_id");
 const errorSection = document.getElementById("spot-error");
 const contentSection = document.getElementById("spot-content");
 const titleElement = document.getElementById("spot-title");
-const descriptionElement = document.getElementById("spot-description");
+const introElement = document.getElementById("spot-intro");
 const categoryElement = document.getElementById("spot-category");
 const areaElement = document.getElementById("spot-area");
 const googleLinkElement = document.getElementById("spot-google-link");
@@ -33,6 +33,65 @@ function setTextOrHide(element, value) {
     element.textContent = "";
     element.hidden = true;
   }
+}
+
+// 改行や空白を整えて、表示に使える文字列へ整形する
+function normalizeText(value) {
+  if (!value) return "";
+  return String(value)
+    .replace(/\r\n/g, "\n")
+    .replace(/\r/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+// 紹介文を汎用テンプレートで作成する（系統別分岐はしない）
+function buildIntroText(spot) {
+  // 必須ではない項目は、存在するものだけ使う
+  const name = spot.name ? spot.name : "名称不明";
+  const municipality = spot.municipality ? spot.municipality : "";
+  const categoryLabel = spot.category ? spot.category : "スポット";
+
+  // 1段目（短文：2文以内）
+  const firstSentence = municipality
+    ? `${name}は、${municipality}にある${categoryLabel}スポットです。`
+    : `${name}は、${categoryLabel}スポットです。`;
+  const secondSentence = "周辺での立ち寄り先として利用しやすい場所です。";
+
+  // 2段目（補足：2〜4文）
+  const supplementSentences = [
+    municipality
+      ? `${municipality}周辺での外出や用事の合間に訪れやすく、食事や休憩など幅広い目的で利用できます。`
+      : "外出や用事の合間に訪れやすく、食事や休憩など幅広い目的で利用できます。",
+    "営業時間や混雑状況は日によって変わるため、訪問前に地図サービスで最新情報を確認するのがおすすめです。",
+    "写真や口コミを参考にすると、現地の雰囲気をつかみやすくなります。",
+  ];
+
+  // 2段構成で文章を組み立てる（改行は CSS で表示）
+  const shortParagraph = [firstSentence, secondSentence].join("");
+  const supplementParagraph = supplementSentences.join("");
+  let introText = `${shortParagraph}\n${supplementParagraph}`;
+
+  // 文字数が長い場合は補足文を短縮して目安に収める
+  const maxLength = 300;
+  const minLength = 150;
+  if (introText.length > maxLength) {
+    for (let i = supplementSentences.length - 1; i >= 1; i -= 1) {
+      const reducedSupplement = supplementSentences.slice(0, i).join("");
+      const candidate = `${shortParagraph}\n${reducedSupplement}`;
+      if (candidate.length <= maxLength) {
+        introText = candidate;
+        break;
+      }
+    }
+  }
+
+  // 150字未満の場合でも分岐はせず、そのまま返す
+  if (introText.length < minLength) {
+    return introText;
+  }
+
+  return introText;
 }
 
 // エラー表示に切り替える（spot_id 不正やデータ取得失敗時）
@@ -75,7 +134,7 @@ if (!spotId) {
       toggleElement(errorSection, false);
       toggleElement(contentSection, true);
 
-      const spotName = spot.name ?? "名称未設定";
+      const spotName = spot.name ?? "名称不明";
       setTextOrHide(titleElement, spotName);
 
       // カテゴリは # を付けて表示する
@@ -88,8 +147,10 @@ if (!spotId) {
           : "";
       setTextOrHide(areaElement, areaText);
 
-      // 説明文が無い場合は非表示
-      setTextOrHide(descriptionElement, spot.description ?? "");
+      // 紹介文は description を優先し、無い場合は自動生成する
+      const normalizedDescription = normalizeText(spot.description);
+      const introText = normalizedDescription || buildIntroText(spot);
+      setTextOrHide(introElement, introText);
 
       // Google マップへのリンクを生成する
       if (googleLinkElement) {
@@ -110,8 +171,8 @@ if (!spotId) {
       // タイトルと meta description をスポットに合わせて更新する
       document.title = `${spotName}｜四国おすすめスポットマップ`;
       if (metaDescription) {
-        const descriptionText = spot.description
-          ? spot.description
+        const descriptionText = introText
+          ? introText.replace(/\n/g, " ")
           : `${spotName}の詳細ページです。`;
         metaDescription.setAttribute("content", descriptionText);
       }
