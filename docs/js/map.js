@@ -42,10 +42,11 @@ function renderSpotPanel(spot) {
   if (google) {
     google.href = `https://www.google.com/maps/dir/?api=1&destination=${spot.lat},${spot.lng}`;
   }
-  // 詳細ページ（後で作る想定：spot_idが無いなら非表示）
+  // 詳細ページ（spot_idが無いなら非表示）
   if (detail) {
     if (spot.spot_id) {
-      detail.href = `./spot/${encodeURIComponent(spot.spot_id)}.html`;
+      // 動的詳細ページ（b方式）へ遷移させる
+      detail.href = `./spot/index.html?spot_id=${encodeURIComponent(spot.spot_id)}`;
       detail.style.display = "inline-block";
     } else {
       detail.style.display = "none";
